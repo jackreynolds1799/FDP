@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0b1220">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<title>Augmented FDP Calculator</title>
+<style>
+:root{--bg:#07101e;--panel:#101b2d;--panel2:#152238;--line:#263650;--text:#f4f7fb;--muted:#9aabc3;--accent:#5ca9ff;--accent2:#173b65;--good:#65d39b;--warn:#ffcc66;--bad:#ff7a86;--shadow:0 12px 28px rgba(0,0,0,.22)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html{background:var(--bg)}body{margin:0;background:linear-gradient(180deg,#0a1425 0,#07101e 260px);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;font-size:16px;line-height:1.35;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+.app{max-width:680px;margin:0 auto;padding:20px 16px 44px}.hero{padding:10px 2px 20px}.eyebrow{color:var(--accent);font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}.hero h1{font-size:29px;line-height:1.08;margin:7px 0 8px;letter-spacing:-.035em}.hero p{margin:0;color:var(--muted);font-size:14px}.section{margin:0 0 18px}.section-head{display:flex;align-items:flex-start;gap:11px;margin:0 2px 11px}.num{width:29px;height:29px;flex:0 0 29px;border-radius:50%;display:grid;place-items:center;background:var(--accent2);color:#cfe7ff;font-weight:800;font-size:13px}.section h2{font-size:18px;margin:1px 0 2px}.sub{color:var(--muted);font-size:13px}.card{background:rgba(16,27,45,.94);border:1px solid var(--line);border-radius:18px;padding:15px;box-shadow:var(--shadow)}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{min-width:0}.field.full{grid-column:1/-1}label{display:block;color:#dbe5f3;font-size:13px;font-weight:650;margin:0 0 7px}.hint{display:block;color:var(--muted);font-size:11px;font-weight:400;margin-top:5px}.input-wrap{position:relative}input,select{appearance:none;-webkit-appearance:none;width:100%;height:50px;border:1px solid #334663;border-radius:12px;background:#091525;color:var(--text);font:600 18px/1 -apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif;padding:0 13px;outline:none;font-variant-numeric:tabular-nums}input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(92,169,255,.16)}select{font-size:16px;padding-right:34px}.suffix{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:11px;font-weight:800;pointer-events:none}.metrics{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:13px}.metric{background:var(--panel2);border:1px solid rgba(255,255,255,.04);border-radius:13px;padding:11px;min-width:0}.metric .k{font-size:11px;color:var(--muted);margin-bottom:4px}.metric .v{font-size:19px;font-weight:760;letter-spacing:-.02em;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.metric .v.small{font-size:15px}.strategy{display:grid;gap:9px;margin-bottom:14px}.strategy input{position:absolute;opacity:0;pointer-events:none}.strategy label{margin:0;padding:12px 13px;border-radius:13px;border:1px solid var(--line);background:#0b1728;cursor:pointer}.strategy label strong{display:block;font-size:15px}.strategy label span{display:block;color:var(--muted);font-size:12px;margin-top:3px;font-weight:400}.strategy input:checked+label{border-color:var(--accent);background:rgba(23,59,101,.58);box-shadow:inset 0 0 0 1px rgba(92,169,255,.25)}.result{margin-top:13px;border-radius:15px;padding:14px;background:linear-gradient(135deg,#14263e,#101d31);border:1px solid #2b4261}.crewline{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}.crewbox{padding:10px;border-radius:12px;background:rgba(4,11,21,.35)}.crewbox .k{font-size:11px;color:var(--muted)}.crewbox .v{font-size:23px;font-weight:800;margin-top:3px;font-variant-numeric:tabular-nums}.status{margin-top:12px;padding:11px 12px;border-radius:11px;font-size:13px;font-weight:650}.good{background:rgba(101,211,155,.1);color:#a9ecc9;border:1px solid rgba(101,211,155,.25)}.warn{background:rgba(255,204,102,.1);color:#ffe0a1;border:1px solid rgba(255,204,102,.25)}.bad{background:rgba(255,122,134,.1);color:#ffb2ba;border:1px solid rgba(255,122,134,.25)}.thresholds{display:grid;grid-template-columns:1fr;gap:9px;margin-top:12px}.threshold{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 13px;background:#0b1728;border:1px solid var(--line);border-radius:13px}.threshold .left{min-width:0}.threshold .name{font-size:12px;color:var(--muted)}.threshold .desc{font-size:11px;color:#71849f;margin-top:2px}.threshold .time{font-size:23px;font-weight:800;white-space:nowrap;font-variant-numeric:tabular-nums}.error{display:none;margin-top:10px;color:#ffc2c8;background:rgba(255,122,134,.09);border:1px solid rgba(255,122,134,.22);border-radius:10px;padding:9px 10px;font-size:12px}.foot{color:#71849f;font-size:11px;padding:4px 4px 0}.foot strong{color:#9fb0c8}.divider{height:1px;background:var(--line);margin:14px 0}.pill{display:inline-block;padding:3px 7px;border-radius:999px;background:#152d4c;color:#b9dbff;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;margin-bottom:7px}
+@media(max-width:390px){.app{padding-left:12px;padding-right:12px}.hero h1{font-size:26px}.grid{gap:9px}.card{padding:13px}.metric .v{font-size:17px}.crewbox .v{font-size:21px}}
+@media(max-width:340px){.grid,.metrics,.crewline{grid-template-columns:1fr}.field.full{grid-column:auto}}
+</style>
+</head>
+<body>
+<main class="app">
+<header class="hero"><div class="eyebrow">Flight Duty Planning</div><h1>Augmented FDP Calculator</h1><p>Offline calculator for augmented-crew rest and discretion planning. All clock times are UTC / 24-hour.</p></header>
+
+<section class="section">
+<div class="section-head"><div class="num">1</div><div><h2>Before the duty</h2><div class="sub">How much qualifying rest is required?</div></div></div>
+<div class="card">
+<div class="grid">
+<div class="field"><label for="start">FDP start</label><div class="input-wrap"><input id="start" value="02:50" inputmode="numeric" maxlength="5" autocomplete="off"><span class="suffix">Z</span></div></div>
+<div class="field"><label for="std">Standard max FDP</label><input id="std" value="13:15" inputmode="numeric" maxlength="5" autocomplete="off"></div>
+<div class="field full"><label for="sched">Scheduled FDP</label><input id="sched" value="15:50" inputmode="numeric" maxlength="5" autocomplete="off"></div>
+</div>
+<div id="err1" class="error"></div>
+<div class="metrics">
+<div class="metric"><div class="k">Standard expiry</div><div class="v" id="stdexp">—</div></div>
+<div class="metric"><div class="k">Scheduled on-block</div><div class="v" id="schedend">—</div></div>
+<div class="metric"><div class="k">Extension required</div><div class="v" id="extreq">—</div></div>
+<div class="metric"><div class="k">Minimum total rest</div><div class="v" id="restreq">—</div></div>
+</div>
+</div>
+</section>
+
+<section class="section">
+<div class="section-head"><div class="num">2</div><div><h2>After sector 1</h2><div class="sub">Update with what actually happened.</div></div></div>
+<div class="card">
+<div class="grid">
+<div class="field"><label for="midon">Intermediate on-block</label><div class="input-wrap"><input id="midon" value="11:30" inputmode="numeric" maxlength="5" autocomplete="off"><span class="suffix">Z</span></div></div>
+<div class="field"><label for="prior">CN/FO rest achieved</label><input id="prior" value="04:20" inputmode="numeric" maxlength="5" autocomplete="off"></div>
+<div class="field"><label for="block">Return block time</label><input id="block" value="06:00" inputmode="numeric" maxlength="5" autocomplete="off"></div>
+<div class="field"><label for="offset">Return rest starts after push<span class="hint">00:20 = rest starts 20 min after push</span></label><input id="offset" value="00:00" inputmode="numeric" maxlength="5" autocomplete="off"></div>
+</div>
+<div id="err2" class="error"></div>
+<div class="metrics">
+<div class="metric"><div class="k">Rest still required</div><div class="v" id="remain">—</div></div>
+<div class="metric"><div class="k">Sector 1 rest credit</div><div class="v" id="priorcredit">—</div></div>
+<div class="metric"><div class="k">CN/FO current max FDP</div><div class="v small" id="currentdur">—</div></div>
+<div class="metric"><div class="k">SO/RQ standard limit</div><div class="v" id="burn">—</div></div>
+</div>
+</div>
+</section>
+
+<section class="section">
+<div class="section-head"><div class="num">3</div><div><h2>Return-sector strategy</h2><div class="sub">Choose who uses discretion and test the expected push.</div></div></div>
+<div class="card">
+<div class="pill">Discretion strategy</div>
+<div class="strategy">
+<div><input type="radio" id="str-relief" name="strategy" value="relief" checked><label for="str-relief"><strong>SO/RQ first</strong><span>Use SO/RQ discretion only as needed to generate enough extra CN/FO rest. Aim for no CN/FO discretion.</span></label></div>
+<div><input type="radio" id="str-none" name="strategy" value="none"><label for="str-none"><strong>No discretion</strong><span>Nobody uses discretion. Shows the limit from qualifying rest alone.</span></label></div>
+<div><input type="radio" id="str-both" name="strategy" value="both"><label for="str-both"><strong>SO/RQ first, then CN/FO if required</strong><span>Use SO/RQ discretion for extra rest, then show any remaining CN/FO discretion requirement.</span></label></div>
+</div>
+<div class="grid">
+<div class="field"><label for="push">Proposed push</label><div class="input-wrap"><input id="push" value="14:00" inputmode="numeric" maxlength="5" autocomplete="off"><span class="suffix">Z</span></div></div>
+<div class="field"><label for="maxso">Max SO/RQ discretion</label><select id="maxso"><option value="30">0:30</option><option value="60">1:00</option><option value="90">1:30</option><option value="120" selected>2:00</option></select></div>
+</div>
+<div id="err3" class="error"></div>
+<div id="result" class="result"></div>
+<div class="divider"></div>
+<div class="pill">Latest push · CN/FO no discretion</div>
+<div id="thresholds" class="thresholds"></div>
+</div>
+</section>
+
+<div class="foot"><strong>Assumptions used:</strong> qualifying rest extends CN/FO FDP by 50% of rest obtained; SO/RQ may operate to standard FDP plus selected discretion; SO/RQ discretion is not added directly to CN/FO FDP; FDP ends at final on-block; CN/FO return rest continues until SO/RQ cease operating. This is a planning aid only — your operator-approved FTL scheme/manual is controlling.</div>
+</main>
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+const ids=['start','std','sched','midon','prior','block','offset','push'];
+function dur(s){const m=/^(\d{1,2}):(\d{2})$/.exec((s||'').trim());return(!m||+m[2]>59)?null:+m[1]*60+ +m[2]}
+function clk(s){const m=/^(\d{1,2}):(\d{2})$/.exec((s||'').trim());return(!m||+m[1]>23||+m[2]>59)?null:+m[1]*60+ +m[2]}
+function hm(x){x=Math.max(0,Math.round(x));return Math.floor(x/60)+':'+String(x%60).padStart(2,'0')}
+function fc(x){x=((Math.round(x)%1440)+1440)%1440;return String(Math.floor(x/60)).padStart(2,'0')+':'+String(x%60).padStart(2,'0')+'Z'}
+function err(id,msg){const e=$(id);e.textContent=msg;e.style.display=msg?'block':'none'}
+function strat(){return document.querySelector('input[name="strategy"]:checked').value}
+function normalise(el){let d=el.value.replace(/\D/g,'').slice(0,4);if(d.length===4)el.value=d.slice(0,2)+':'+d.slice(2);else el.value=d}
+function finish(el){let d=el.value.replace(/\D/g,'').slice(0,4);if(d.length===3)d='0'+d;if(d.length===4)el.value=d.slice(0,2)+':'+d.slice(2)}
+function calc(){
+const S=clk($('start').value),F=dur($('std').value),Q=dur($('sched').value);
+if([S,F,Q].some(v=>v===null)){err('err1','Check Part 1. Use HH:MM, with clock times from 00:00 to 23:59.');return}else err('err1','');
+const R=S+F, reqExt=Math.max(0,Q-F), reqRest=reqExt*2;
+$('stdexp').textContent=fc(R);$('schedend').textContent=fc(S+Q);$('extreq').textContent=hm(reqExt);$('restreq').textContent=hm(reqRest);
+let M=clk($('midon').value),A=dur($('prior').value),B=dur($('block').value),O=dur($('offset').value);
+if([M,A,B,O].some(v=>v===null)){err('err2','Check Part 2. Use HH:MM.');return}else err('err2','');
+if(M<S)M+=1440;
+const currentDur=F+A/2;
+$('remain').textContent=hm(Math.max(0,reqRest-A));$('priorcredit').textContent=hm(A/2);$('currentdur').textContent=hm(currentDur)+' · '+fc(S+currentDur);$('burn').textContent=fc(R);
+let P=clk($('push').value);if(P===null){err('err3','Proposed push must be a 24-hour time from 00:00 to 23:59.');return}else err('err3','');if(P<S)P+=1440;
+function state(D,p=P){const reliefEnd=R+D,rr=Math.max(0,reliefEnd-(p+O)),total=A+rr,credit=total/2,cnDur=F+credit,cnExpiry=S+cnDur,on=p+B,cnNeed=Math.max(0,on-cnExpiry);return{D,reliefEnd,rr,total,credit,cnDur,cnExpiry,on,cnNeed}}
+const mode=strat(),maxSO=+$('maxso').value;
+let D=0,z;
+if(mode==='none'){z=state(0)}else{
+ const base=state(0); const neededSO=Math.ceil(base.cnNeed*2); D=Math.min(maxSO,Math.max(0,neededSO)); z=state(D);
+}
+const ground=P-M;
+let cnDisplay=0,status='',klass='good';
+if(mode==='relief'){
+ cnDisplay=z.cnNeed;
+ if(z.cnNeed<=0){status='CN/FO remain within their rest-extended FDP. SO/RQ use '+hm(D)+' discretion.';klass='good'}
+ else{status='Even with '+hm(D)+' SO/RQ discretion, CN/FO would still require '+hm(z.cnNeed)+' discretion.';klass=z.cnNeed<=120?'warn':'bad'}
+}else if(mode==='none'){
+ cnDisplay=z.cnNeed;
+ if(z.cnNeed<=0){status='No discretion is required by either crew pair.';klass='good'}else{status='Without discretion, CN/FO exceed their rest-extended FDP by '+hm(z.cnNeed)+'.';klass='warn'}
+}else{
+ cnDisplay=z.cnNeed;
+ if(z.cnNeed<=0){status='SO/RQ use '+hm(D)+' discretion; CN/FO require none.';klass='good'}else if(z.cnNeed<=120){status='SO/RQ use '+hm(D)+' discretion; CN/FO would then require '+hm(z.cnNeed)+' discretion.';klass='warn'}else{status='CN/FO would require more than 2:00 discretion under these inputs.';klass='bad'}
+}
+$('result').innerHTML='<div class="crewline"><div class="crewbox"><div class="k">SO/RQ discretion used</div><div class="v">'+hm(D)+'</div></div><div class="crewbox"><div class="k">CN/FO discretion required</div><div class="v">'+(cnDisplay>0?hm(cnDisplay):'None')+'</div></div></div><div class="metrics"><div class="metric"><div class="k">SO/RQ operate until</div><div class="v">'+fc(z.reliefEnd)+'</div></div><div class="metric"><div class="k">Return rest</div><div class="v">'+hm(z.rr)+'</div></div><div class="metric"><div class="k">Total CN/FO rest</div><div class="v">'+hm(z.total)+'</div></div><div class="metric"><div class="k">Rest FDP credit</div><div class="v">'+hm(z.credit)+'</div></div><div class="metric"><div class="k">CN/FO max FDP</div><div class="v">'+hm(z.cnDur)+'</div></div><div class="metric"><div class="k">CN/FO expiry</div><div class="v">'+fc(z.cnExpiry)+'</div></div><div class="metric"><div class="k">Final on-block</div><div class="v">'+fc(z.on)+'</div></div><div class="metric"><div class="k">Ground time</div><div class="v">'+(ground>=0?hm(ground):'—')+'</div></div></div><div class="status '+klass+'">'+status+'</div>';
+function latest(D){const relief=R+D;let p=(S+F+A/2+0.5*(relief-O)-B)/1.5;if(p+O>relief)p=S+F+A/2-B;return p}
+const th=$('thresholds');th.innerHTML='';[[0,'No discretion'],[60,'SO/RQ +1:00'],[120,'SO/RQ +2:00']].forEach(([d,n])=>{const p=latest(d),el=document.createElement('div');el.className='threshold';el.innerHTML='<div class="left"><div class="name">'+n+'</div><div class="desc">CN/FO remain out of discretion</div></div><div class="time">'+fc(p)+'</div>';th.appendChild(el)});
+}
+ids.forEach(id=>{const el=$(id);el.addEventListener('focus',()=>{setTimeout(()=>el.select(),0)});el.addEventListener('input',()=>{normalise(el);calc()});el.addEventListener('blur',()=>{finish(el);calc()})});
+$('maxso').addEventListener('change',calc);document.querySelectorAll('input[name="strategy"]').forEach(x=>x.addEventListener('change',calc));
+calc();
+if('serviceWorker' in navigator){navigator.serviceWorker.register('./service-worker.js').catch(()=>{});}
+})();
+</script>
+</body>
+</html>
