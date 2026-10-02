@@ -16,6 +16,7 @@
 @media(max-width:390px){.app{padding-left:12px;padding-right:12px}.hero h1{font-size:26px}.grid{gap:9px}.card{padding:13px}.metric .v{font-size:17px}.crewbox .v{font-size:21px}}
 @media(max-width:340px){.grid,.metrics,.crewline{grid-template-columns:1fr}.field.full{grid-column:auto}}
 </style>
+<style>.offline-state{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:6px 9px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:11px;font-weight:750}.offline-state.ready{color:#a9ecc9;border-color:rgba(101,211,155,.25);background:rgba(101,211,155,.08)}</style>
 </head>
 <body>
 <main class="app">
@@ -79,7 +80,7 @@
 </div>
 </section>
 
-<div class="foot"><strong>Assumptions used:</strong> qualifying rest extends CN/FO FDP by 50% of rest obtained; SO/RQ may operate to standard FDP plus selected discretion; SO/RQ discretion is not added directly to CN/FO FDP; FDP ends at final on-block; CN/FO return rest continues until SO/RQ cease operating. This is a planning aid only — your operator-approved FTL scheme/manual is controlling.</div>
+<div class="foot"><strong>v1.1</strong> · Offline-capable build<br><strong>Assumptions used:</strong> qualifying rest extends CN/FO FDP by 50% of rest obtained; SO/RQ may operate to standard FDP plus selected discretion; SO/RQ discretion is not added directly to CN/FO FDP; FDP ends at final on-block; CN/FO return rest continues until SO/RQ cease operating. This is a planning aid only — your operator-approved FTL scheme/manual is controlling.</div>
 </main>
 <script>
 (()=>{
@@ -130,7 +131,19 @@ const th=$('thresholds');th.innerHTML='';[[0,'No discretion'],[60,'SO/RQ +1:00']
 ids.forEach(id=>{const el=$(id);el.addEventListener('focus',()=>{setTimeout(()=>el.select(),0)});el.addEventListener('input',()=>{normalise(el);calc()});el.addEventListener('blur',()=>{finish(el);calc()})});
 $('maxso').addEventListener('change',calc);document.querySelectorAll('input[name="strategy"]').forEach(x=>x.addEventListener('change',calc));
 calc();
-if('serviceWorker' in navigator){navigator.serviceWorker.register('./service-worker.js').catch(()=>{});}
+if('serviceWorker' in navigator){
+ const state=$('offlineState');
+ navigator.serviceWorker.register('./service-worker.js').then(async reg=>{
+   await navigator.serviceWorker.ready;
+   try{
+     const cache=await caches.open('fdp-calculator-v1.1');
+     const required=['./','./index.html','./manifest.webmanifest','./icon-180.png','./icon-512.png'];
+     const checks=await Promise.all(required.map(x=>cache.match(x)));
+     if(checks.every(Boolean)){state.textContent='Offline ready ✓';state.classList.add('ready');}
+     else{state.textContent='Offline cache incomplete — stay online and reload';}
+   }catch(e){state.textContent='Offline status unavailable';}
+ }).catch(()=>{state.textContent='Offline setup failed — reload while online';});
+}else{$('offlineState').textContent='Offline install not supported in this browser';}
 })();
 </script>
 </body>
